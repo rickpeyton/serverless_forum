@@ -27,7 +27,7 @@ class Post
     url
     user_name
   ).freeze
-  URL_FORMAT = %r{(https|http)://(\w+.\w+$|\w+.\w+.\w+$)}i.freeze
+  URL_FORMAT = %r{(https|http)://(\w+.\w+$|\w+.\w+.\w+)}i.freeze
 
   option :comment, type: Dry::Types["string"].constrained(min_size: 3), optional: true
   option :reply_count, default: proc { 0.0 }

@@ -25,25 +25,25 @@ class App < Sinatra::Base
   CUSTOM = Customizations.setup
   DB = Aws::DynamoDB::Client.new(endpoint: "http://db:8000") # TODO: Set the endpoint from the ENV
 
-  get "/" do
+  get "/" do # Post Index
     page = Page.from_params(params[:page])
     @posts = PostCollection.all(limit: 20, page: page)
     @page = Page.new(next_page: @posts.last_evaluated_key)
     erb :index
   end
 
-  get "/post" do
+  get "/post" do # Post Show
     id = params[:id]
     @post = Post.find_by(id: id)
     @replies = Reply.where(reply_post_id: id)
     erb :post
   end
 
-  get "/post/new" do
+  get "/post/new" do # Post New
     erb :post_new
   end
 
-  post "/post" do
+  post "/post" do # Post Create
     post = Post.new(sanitize_params(params, Post))
     post.save
     redirect "/"
