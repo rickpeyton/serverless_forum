@@ -1,0 +1,2 @@
+inherit_from:
+  - https://raw.githubusercontent.com/RamseyInHouse/ramsey-cop/master/default.yml

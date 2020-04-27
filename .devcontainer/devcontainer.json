@@ -1,0 +1,41 @@
+{
+  "name": "Serverless Forum",
+  "dockerComposeFile": "docker-compose.yml",
+  "service": "app",
+  "workspaceFolder": "/workspace",
+  "extensions": [
+    "castwide.solargraph",
+    "eamodio.gitlens",
+    "esbenp.prettier-vscode",
+    "hariscodes.vscode-dynamodb",
+    "kaiwood.endwise",
+    "mutantdino.resourcemonitor",
+    "noku.rails-run-spec-vscode",
+    "peterjausovec.vscode-docker",
+    "rebornix.Ruby"
+  ],
+  "settings": {
+    "[json]": {
+      "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[ruby]": {
+      "editor.formatOnSave": true
+    },
+    "editor.formatOnSaveTimeout": 2500,
+    "remote.extensionKind": {
+      "peterjausovec.vscode-docker": "workspace"
+    },
+    "ruby.format": "rubocop",
+    "ruby.codeCompletion": false,
+    "ruby.intellisense": "rubyLocate",
+    "ruby.lint": {
+      "rubocop": true
+    },
+    "ruby.useBundler": true,
+    "solargraph.useBundler": true,
+    "files.associations": {
+      "*.html.erb": "html",
+      "*.erb": "html"
+    }
+  }
+}

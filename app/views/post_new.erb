@@ -1,0 +1,22 @@
+<form action="<%= url('post') %>" method="POST">
+  <div class="row">
+    <div class="twelve columns">
+      <label for="post-title-text">Title</label>
+      <input class="u-full-width" type="text" placeholder="Title here" id="post-title-text" name="title">
+    </div>
+  </div>
+  <div class="row">
+    <div class="twelve columns">
+      <label for="post-url-text">Link</label>
+      <input class="u-full-width" type="url" placeholder="Link here" id="post-url-text" name="url">
+    </div>
+  </div>
+  <label for="post-comment">Comment</label>
+  <textarea class="u-full-width" placeholder="Comment here" id="post-comment" name="comment"></textarea>
+  <input class="button-primary" type="submit" value="Submit">
+  <div class="row">
+    <div class="twelve columns">
+      You must include a title, and a link or a comment. You may include all 3.
+    </div>
+  </div>
+</form>

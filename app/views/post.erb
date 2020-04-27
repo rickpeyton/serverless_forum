@@ -1,0 +1,33 @@
+<div class="row" style="padding-top: 12px">
+  <% if @post.url %>
+    <a href="<%= url(@post.url) %>"><%= @post.title %></a>
+  <% else %>
+    <%= @post.title %>
+  <% end %>
+</div>
+
+<div class="row post-details">
+  <%= @post.user_name %> <%= ViewHelpers.time_ago(@post.created_at_epoch) %> |
+  <a href="<%= FFaker::Internet.http_url %>%"><%= ViewHelpers.plural(@post.reply_count_int, "reply", "replies") %></a>
+</div>
+
+<div class="row">
+  <%= @post.comment %>
+</div>
+
+<form id="add-reply">
+  <label for="reply-comment-textarea">Add Reply</label>
+  <textarea class="u-full-width" placeholder="Comment here" id="reply-comment-textarea"></textarea>
+  <input class="button-primary" type="submit" value="Submit" />
+</form>
+
+<% @replies.each do |reply| %>
+  <div class="row twelve columns reply">
+    <div class="post-details"><%= reply.user_name %> <%= ViewHelpers.time_ago(reply.created_at.to_time.to_i) %></div>
+    <div class="reply-body"><%= reply.comment %></div>
+  </div>
+<% end %>
+
+<div class="row">
+  <a href="#add-reply">Add Reply</a>
+</div>

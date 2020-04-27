@@ -1,0 +1,23 @@
+<table class="u-full-width">
+  <tbody>
+    <% @posts.each do |post| %>
+      <tr>
+        <td>
+          <div class="row">
+            <a href="<%= url('/post?id=' + post.id) %>"><%= post.title %></a>
+          </div>
+          <div class="row post-details">
+            <%= post.user_name %> <%= ViewHelpers.time_ago(post.created_at_epoch) %>
+            | <a href="post?id=<%= post.id %>"><%= ViewHelpers.plural(post.reply_count_int, "reply", "replies") %></a>
+          </div>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+  <div class="row">
+    <% if @page.next_page %>
+      <div class="u-pull-right"><a href='<%= url("/?page=#{@page.encoded_next}") %>'>Next Page</a></div>
+    <% end %>
+  </div>
