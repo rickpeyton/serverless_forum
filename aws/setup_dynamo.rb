@@ -111,6 +111,7 @@ posts = db.query(
   }
 ).items
 
+# Add replies to posts
 posts.each do |post|
   replies = rand(0..10)
   post = post.with_indifferent_access.symbolize_keys
