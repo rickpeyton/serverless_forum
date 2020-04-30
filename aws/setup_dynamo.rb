@@ -123,7 +123,7 @@ posts.each do |post|
       {
         item: {
           comment: FFaker::Lorem.sentence,
-          created_at: Time.at(post_created_at_epoch + rand(60..259_200)).to_datetime.iso8601,
+          created_at: Time.at(rand(post_created_at_epoch..Time.now.to_i)).to_datetime.iso8601,
           reply_post_id: post_id,
           id: SecureRandom.uuid,
           item_type: "reply",

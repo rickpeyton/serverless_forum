@@ -14,6 +14,7 @@ require_relative "models/page"
 require_relative "models/post"
 require_relative "models/post_collection"
 require_relative "models/reply"
+require_relative "models/reply_collection"
 require_relative "views/view_helpers"
 
 class App < Sinatra::Base
@@ -35,7 +36,7 @@ class App < Sinatra::Base
   get "/post" do # Post Show
     id = params[:id]
     @post = Post.find_by(id: id)
-    @replies = Reply.where(reply_post_id: id)
+    @replies = ReplyCollection.where(reply_post_id: id)
     erb :post
   end
 
