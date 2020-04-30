@@ -50,6 +50,12 @@ class App < Sinatra::Base
     redirect "/"
   end
 
+  post "/reply" do # Reply Create
+    reply = Reply.new(sanitize_params(params, Reply))
+    reply.save
+    redirect "/post?id=#{reply.reply_post_id}"
+  end
+
   def sanitize_params(parameters, klass)
     parameters.slice(*klass::PARAMETERS).delete_if { |_k, v| v.blank? }.with_indifferent_access.symbolize_keys
   end

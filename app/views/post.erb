@@ -1,8 +1,8 @@
 <div class="row" style="padding-top: 12px">
   <% if @post.url %>
-    <a href="<%= url(@post.url) %>"><%= @post.title %></a>
+  <a href="<%= url(@post.url) %>"><%= @post.title %></a>
   <% else %>
-    <%= @post.title %>
+  <%= @post.title %>
   <% end %>
 </div>
 
@@ -15,9 +15,14 @@
   <%= @post.comment %>
 </div>
 
-<form id="add-reply">
-  <label for="reply-comment-textarea">Add Reply</label>
-  <textarea class="u-full-width" placeholder="Comment here" id="reply-comment-textarea"></textarea>
+<form action="<%= url('reply') %>" method="POST" id="add-reply">
+  <div class="row">
+    <div class="twelve columns">
+      <label for="reply-comment-textarea">Add Reply</label>
+      <textarea class="u-full-width" placeholder="Comment here" id="reply-comment-textarea" name="comment"></textarea>
+    </div>
+  </div>
+  <input type="hidden" name="reply_post_id" value="<%= @post.id %>">
   <input class="button-primary" type="submit" value="Submit" />
 </form>
 

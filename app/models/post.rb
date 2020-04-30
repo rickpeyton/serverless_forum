@@ -19,13 +19,8 @@ class Post
 
   PARAMETERS = %w(
     comment
-    reply_count
-    created_at
-    id
-    item_type
     title
     url
-    user_name
   ).freeze
   URL_FORMAT = %r{(https|http)://(\w+.\w+$|\w+.\w+.\w+)}i.freeze
 
@@ -44,6 +39,26 @@ class Post
 
   def created_at_epoch
     created_at_datetime.to_time.to_i
+  end
+
+  def increment_reply_count
+    App::DB.update_item(
+      {
+        key: {
+          item_type: "post",
+          id: id
+        },
+        expression_attribute_names: {
+          "#RC" => "reply_count"
+        },
+        expression_attribute_values: {
+          ":rc" => (reply_count_int + 1)
+        },
+        update_expression: "SET #RC = :rc",
+        return_values: "ALL_NEW",
+        table_name: "items"
+      }
+    )
   end
 
   def save
