@@ -11,10 +11,11 @@ require "ffaker" # TODO: Remove before deploy. This is a development gem
 require "sinatra/base"
 
 require_relative "customizations"
+require_relative "models/contracts/post_contract"
+require_relative "models/contracts/reply_contract"
 require_relative "models/page"
 require_relative "models/post"
 require_relative "models/post_collection"
-require_relative "models/contracts/post_contract"
 require_relative "models/reply"
 require_relative "models/reply_collection"
 require_relative "views/view_helpers"
