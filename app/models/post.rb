@@ -13,6 +13,8 @@ class Post
           table_name: "items"
         }
       )
+      return nil if result.items.first.nil?
+
       Post.new(result.items.first.symbolize_keys)
     end
   end
@@ -70,6 +72,7 @@ class Post
         table_name: "items"
       }
     )
+    self
   end
 
 private

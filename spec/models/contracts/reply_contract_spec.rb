@@ -12,6 +12,9 @@ RSpec.describe ReplyContract do
   end
 
   it "is success if the comment is valid" do
+    valid_post = instance_double(Post, id: "valid")
+    allow(Post).to receive(:find_by).and_return(valid_post)
+
     actual = ReplyContract.new.call(comment: "valid", reply_post_id: "valid")
 
     expect(actual).to be_success
@@ -21,5 +24,11 @@ RSpec.describe ReplyContract do
     actual = ReplyContract.new.call({})
 
     expect(actual.errors.to_h[:reply_post_id]).to include "is missing"
+  end
+
+  it "must have a post with the given id" do
+    actual = ReplyContract.new.call(reply_post_id: "invalid")
+
+    expect(actual.errors.to_h[:reply_post_id]).to include "must exist"
   end
 end

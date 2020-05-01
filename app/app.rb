@@ -62,9 +62,19 @@ class App < Sinatra::Base
   end
 
   post "/reply" do # Reply Create
-    reply = Reply.new(sanitize_params(params, Reply))
-    reply.save
-    redirect "/post?id=#{reply.reply_post_id}"
+    reply_contract = ReplyContract.new.call(sanitize_params(params, Reply))
+
+    if reply_contract.success?
+      reply = Reply.new(reply_contract.to_h).save
+      redirect "/post?id=#{reply.reply_post_id}"
+    elsif !reply_contract.errors.to_h.key?(:reply_post_id)
+      @errors = reply_contract.errors.to_h
+      @post = Post.find_by(id: reply_contract.to_h[:reply_post_id])
+      @replies = ReplyCollection.where(reply_post_id: @post.id)
+      erb :post
+    else
+      redirect "/"
+    end
   end
 
   def sanitize_params(parameters, klass)

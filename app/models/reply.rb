@@ -23,6 +23,7 @@ class Reply
       table_name: "items"
     )
     Post.find_by(id: reply_post_id).increment_reply_count
+    self
   end
 
 private
