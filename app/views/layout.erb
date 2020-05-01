@@ -34,6 +34,21 @@
     </div>
   </header>
 
+  <% if @errors.present? %>
+    <div class="container">
+      <div class="row errors">
+        <div class="twelve columns">
+          <p>Please correct the following errors:</p>
+          <ul>
+            <% @errors.each do |k, v| %>
+              <li><%= "#{k.capitalize} #{v.join('.')}" %></li>
+            <% end %>
+          </ul>
+        </div>
+      </div>
+    </div>
+  <% end %>
+
   <div class="container">
     <%= yield %>
   </div>

@@ -1,5 +1,6 @@
 :root {
-  --main-bg-color: rgb(24,43,37);
+  --main-bg-color: rgb(24, 43, 37);
+  --main-error-color: #BF1A2F;
   --main-font-size: 21px;
   --smaller-font-size: calc(var(--main-font-size) * 0.85);
   --smallest-font-size: calc(var(--main-font-size) * 0.69);
@@ -59,6 +60,15 @@ header img {
 
 .center {
   text-align: center;
+}
+
+.errors {
+  background-color: var(--main-error-color);
+  border-radius: 1rem;
+  color: white;
+  font-size: var(--smaller-font-size);
+  margin-top: 1rem;
+  padding: 2rem;
 }
 
 .reply {

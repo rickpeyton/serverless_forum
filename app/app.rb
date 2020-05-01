@@ -6,6 +6,7 @@ require "active_support/core_ext/hash/indifferent_access"
 require "aws-sdk-dynamodb"
 require "dry-initializer"
 require "dry-types"
+require "dry-validation"
 require "ffaker" # TODO: Remove before deploy. This is a development gem
 require "sinatra/base"
 
@@ -13,6 +14,7 @@ require_relative "customizations"
 require_relative "models/page"
 require_relative "models/post"
 require_relative "models/post_collection"
+require_relative "models/contracts/post_contract"
 require_relative "models/reply"
 require_relative "models/reply_collection"
 require_relative "views/view_helpers"
@@ -36,6 +38,8 @@ class App < Sinatra::Base
   get "/post" do # Post Show
     id = params[:id]
     @post = Post.find_by(id: id)
+    redirect "/" unless @post.present?
+
     @replies = ReplyCollection.where(reply_post_id: id)
     erb :post
   end
@@ -45,9 +49,15 @@ class App < Sinatra::Base
   end
 
   post "/post" do # Post Create
-    post = Post.new(sanitize_params(params, Post))
-    post.save
-    redirect "/"
+    post_contract = PostContract.new.call(sanitize_params(params, Post))
+
+    if post_contract.success?
+      Post.new(post_contract.to_h).save
+      redirect "/"
+    else
+      @errors = post_contract.errors.to_h
+      erb :post_new
+    end
   end
 
   post "/reply" do # Reply Create

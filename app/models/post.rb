@@ -1,6 +1,8 @@
 class Post
   class << self
     def find_by(id:)
+      return false if id.blank?
+
       result = App::DB.query(
         {
           expression_attribute_values: {
