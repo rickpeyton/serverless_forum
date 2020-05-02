@@ -1,5 +1,5 @@
 module WebmockStubs
-  def stub_valid_url
+  def stub_valid_link
     stub_request(:get, "http://valid.com/")
       .with(
         headers: {

@@ -24,9 +24,9 @@ class Post
   PARAMETERS = %w(
     comment
     title
-    url
+    link
   ).freeze
-  URL_FORMAT = %r{(https|http)://(\w+.\w+$|\w+.\w+.\w+)}i.freeze
+  LINK_FORMAT = %r{(https|http)://(\w+.\w+$|\w+.\w+.\w+)}i.freeze
 
   option :comment, type: Dry::Types["string"].constrained(min_size: 3), optional: true
   option :reply_count, default: proc { 0.0 }
@@ -34,7 +34,7 @@ class Post
   option :id, default: proc { SecureRandom.uuid }
   option :item_type, default: proc { "post" }
   option :title, type: Dry::Types["string"].constrained(min_size: 3)
-  option :url, type: Dry::Types["string"].constrained(format: URL_FORMAT), optional: true
+  option :link, type: Dry::Types["string"].constrained(format: LINK_FORMAT), optional: true
   option :user_name, default: proc { "Anonymous User" }
 
   def reply_count_int

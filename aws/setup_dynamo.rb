@@ -93,7 +93,7 @@ db.create_table(items_table)
         id: SecureRandom.uuid,
         title: FFaker::Lorem.sentence,
         item_type: "post",
-        url: FFaker::Internet.http_url,
+        link: FFaker::Internet.http_url,
         user_name: FFaker::Internet.user_name
       },
       table_name: "items"
