@@ -1,5 +1,11 @@
 require_relative "../app/app"
 
+require_relative "support/webmock_stubs"
+
+require "webmock/rspec"
+
+WebMock.disable_net_connect!(allow: "db")
+
 RSpec.configure do |config|
   config.expect_with :rspec do |expectations|
     expectations.include_chain_clauses_in_custom_matcher_descriptions = true

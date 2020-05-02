@@ -1,11 +1,17 @@
 RSpec.describe PostContract do
+  include WebmockStubs
+
   it "requires a title" do
+    stub_valid_url
+
     actual = PostContract.new.call(comment: "valid", url: "http://valid.com")
 
     expect(actual.errors.to_h[:title]).to include "is missing"
   end
 
   it "must have a title 3 characters or more" do
+    stub_valid_url
+
     actual = PostContract.new.call(title: "123", comment: "valid", url: "http://valid.com")
 
     expect(actual.errors.to_h[:title]).to include "must be greater than 3 characters"
@@ -29,7 +35,9 @@ RSpec.describe PostContract do
     expect(actual.errors.to_h[:comment]).to include "must be added if url is empty"
   end
 
-  it "does not have to have a comment if it has a url" do
+  it "does not need a comment if it has a url" do
+    stub_valid_url
+
     actual = PostContract.new.call(title: "valid", url: "http://valid.com")
 
     expect(actual).to be_success
@@ -42,8 +50,26 @@ RSpec.describe PostContract do
   end
 
   it "is successful when valid" do
-    actual = PostContract.new.call(title: "valid", url: "https://valid.com", comment: "valid")
+    stub_valid_url
+
+    actual = PostContract.new.call(title: "valid", url: "http://valid.com", comment: "valid")
 
     expect(actual).to be_success
+  end
+
+  it "checks if a url returns a successful response" do
+    allow(PostContract).to receive(:url_works?).and_return(true)
+
+    actual = PostContract.new.call(title: "valid", url: "http://valid.com")
+
+    expect(actual).to be_success
+  end
+
+  it "does not allow a url that is not returning a success" do
+    allow(PostContract).to receive(:url_works?).and_return(false)
+
+    actual = PostContract.new.call(title: "valid", url: "http://invalid.com")
+
+    expect(actual.errors.to_h[:url]).to include "is not working"
   end
 end

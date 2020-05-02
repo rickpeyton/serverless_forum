@@ -7,6 +7,7 @@ require "aws-sdk-dynamodb"
 require "dry-initializer"
 require "dry-types"
 require "dry-validation"
+require "http"
 require "sinatra/base"
 
 require_relative "customizations"

@@ -4,6 +4,7 @@ gem "aws-sdk"
 gem "dry-initializer"
 gem "dry-types"
 gem "dry-validation"
+gem "http"
 gem "sinatra"
 
 group :development, :test do
@@ -21,4 +22,5 @@ end
 
 group :test do
   gem "rspec"
+  gem "webmock"
 end
