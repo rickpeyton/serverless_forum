@@ -8,7 +8,7 @@
 
 <div class="row post-details">
   <%= @post.user_name %> <%= ViewHelpers.time_ago(@post.created_at_epoch) %> |
-  <a href="<%= FFaker::Internet.http_url %>%"><%= ViewHelpers.plural(@post.reply_count_int, "reply", "replies") %></a>
+  <%= ViewHelpers.plural(@post.reply_count_int, "reply", "replies") %>
 </div>
 
 <div class="row">

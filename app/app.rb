@@ -7,7 +7,6 @@ require "aws-sdk-dynamodb"
 require "dry-initializer"
 require "dry-types"
 require "dry-validation"
-require "ffaker" # TODO: Remove before deploy. This is a development gem
 require "sinatra/base"
 
 require_relative "customizations"
