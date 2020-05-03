@@ -29,8 +29,8 @@ class App < Sinatra::Base
   set :views, (proc { File.join(root, "views") })
   set :public_folder, (proc { File.join(root, "assets") })
 
-  enable :sessions
   set :session_secret, ENV.fetch("SESSION_SECRET") { SecureRandom.hex(64) }
+  enable :sessions
 
   EasyCognito.client_id = ENV["COGNITO_CLIENT_ID"]
   EasyCognito.client_secret = ENV["COGNITO_SECRET"]
@@ -66,10 +66,13 @@ class App < Sinatra::Base
   end
 
   post "/post" do # Post Create
-    post_contract = PostContract.new.call(sanitize_params(params, Post))
+    require_user
+
+    post_contract = PostContract.new.call(sanitize_params(params, Post).merge(current_user_params))
 
     if post_contract.success?
       Post.new(post_contract.to_h).save
+      current_user.increment_post_count
       redirect "/"
     else
       @errors = post_contract.errors.to_h
@@ -78,10 +81,13 @@ class App < Sinatra::Base
   end
 
   post "/reply" do # Reply Create
-    reply_contract = ReplyContract.new.call(sanitize_params(params, Reply))
+    require_user
+
+    reply_contract = ReplyContract.new.call(sanitize_params(params, Reply).merge(current_user_params))
 
     if reply_contract.success?
       reply = Reply.new(reply_contract.to_h).save
+      current_user.increment_reply_count
       redirect "/post?id=#{reply.reply_post_id}"
     elsif !reply_contract.errors.to_h.key?(:reply_post_id)
       @errors = reply_contract.errors.to_h
@@ -108,7 +114,16 @@ class App < Sinatra::Base
   end
 
   def current_user
-    @current_user ||= User.find_by(id: session[:current_user_id]) if session[:current_user_id]
+    @current_user = User.find_by(id: session[:current_user_id]) if session[:current_user_id]
+  end
+
+  def current_user_params
+    return {} if current_user.blank?
+
+    {
+      user_id: current_user.id,
+      username: current_user.username
+    }
   end
 
   def require_user

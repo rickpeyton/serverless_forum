@@ -15,7 +15,7 @@ RSpec.describe ReplyContract do
     valid_post = instance_double(Post, id: "valid")
     allow(Post).to receive(:find_by).and_return(valid_post)
 
-    actual = ReplyContract.new.call(comment: "valid", reply_post_id: "valid")
+    actual = ReplyContract.new.call(required_params)
 
     expect(actual).to be_success
   end
@@ -30,5 +30,14 @@ RSpec.describe ReplyContract do
     actual = ReplyContract.new.call(reply_post_id: "invalid")
 
     expect(actual.errors.to_h[:reply_post_id]).to include "must exist"
+  end
+
+  def required_params
+    {
+      comment: "valid",
+      reply_post_id: "valid",
+      user_id: "valid",
+      username: "valid_username"
+    }
   end
 end

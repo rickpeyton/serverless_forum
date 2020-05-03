@@ -38,13 +38,13 @@ RSpec.describe PostContract do
   it "does not need a comment if it has a link" do
     stub_valid_link
 
-    actual = PostContract.new.call(title: "valid", link: "http://valid.com")
+    actual = PostContract.new.call(required_params)
 
     expect(actual).to be_success
   end
 
   it "does not have to have a link if it has a comment" do
-    actual = PostContract.new.call(title: "valid", comment: "valid")
+    actual = PostContract.new.call(title: "valid", user_id: "123", username: "abc", comment: "valid")
 
     expect(actual).to be_success
   end
@@ -52,7 +52,7 @@ RSpec.describe PostContract do
   it "is successful when valid" do
     stub_valid_link
 
-    actual = PostContract.new.call(title: "valid", link: "http://valid.com", comment: "valid")
+    actual = PostContract.new.call(required_params.merge(comment: "valid"))
 
     expect(actual).to be_success
   end
@@ -60,7 +60,7 @@ RSpec.describe PostContract do
   it "checks if a link returns a successful response" do
     allow(PostContract).to receive(:link_works?).and_return(true)
 
-    actual = PostContract.new.call(title: "valid", link: "http://valid.com")
+    actual = PostContract.new.call(required_params)
 
     expect(actual).to be_success
   end
@@ -71,5 +71,14 @@ RSpec.describe PostContract do
     actual = PostContract.new.call(title: "valid", link: "http://invalid.com")
 
     expect(actual.errors.to_h[:link]).to include "is not working"
+  end
+
+  def required_params
+    {
+      title: "valid",
+      link: "http://valid.com",
+      user_id: "123",
+      username: "abc"
+    }
   end
 end

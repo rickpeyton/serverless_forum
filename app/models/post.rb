@@ -35,7 +35,8 @@ class Post
   option :item_type, default: proc { "post" }
   option :title, type: Dry::Types["string"].constrained(min_size: 3)
   option :link, type: Dry::Types["string"].constrained(format: LINK_FORMAT), optional: true
-  option :username, default: proc { "Anonymous User" }
+  option :user_id
+  option :username
 
   def reply_count_int
     reply_count.to_i
@@ -46,7 +47,7 @@ class Post
   end
 
   def increment_reply_count
-    App::DB.update_item(
+    result = App::DB.update_item(
       {
         key: {
           item_type: "post",
@@ -63,6 +64,7 @@ class Post
         table_name: "items"
       }
     )
+    Post.new(result.attributes.symbolize_keys)
   end
 
   def save

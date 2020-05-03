@@ -2,6 +2,8 @@ class ReplyContract < Dry::Validation::Contract
   params do
     required(:comment).value(:string)
     required(:reply_post_id).value(:string)
+    required(:user_id).value(:string)
+    required(:username).value(:string)
   end
 
   rule(:comment) do

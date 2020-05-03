@@ -49,6 +49,48 @@ class User
   option :reply_count, default: proc { 0.0 }
   option :username
 
+  def increment_post_count
+    result = App::DB.update_item(
+      {
+        key: {
+          item_type: "user",
+          id: id
+        },
+        expression_attribute_names: {
+          "#PC" => "post_count"
+        },
+        expression_attribute_values: {
+          ":pc" => (post_count + 1)
+        },
+        update_expression: "SET #PC = :pc",
+        return_values: "ALL_NEW",
+        table_name: "items"
+      }
+    )
+    User.new(result.attributes.symbolize_keys)
+  end
+
+  def increment_reply_count
+    result = App::DB.update_item(
+      {
+        key: {
+          item_type: "user",
+          id: id
+        },
+        expression_attribute_names: {
+          "#RC" => "reply_count"
+        },
+        expression_attribute_values: {
+          ":rc" => (reply_count + 1)
+        },
+        update_expression: "SET #RC = :rc",
+        return_values: "ALL_NEW",
+        table_name: "items"
+      }
+    )
+    User.new(result.attributes.symbolize_keys)
+  end
+
   def save
     App::DB.put_item(
       {

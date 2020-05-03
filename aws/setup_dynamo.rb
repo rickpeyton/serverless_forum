@@ -103,8 +103,39 @@ items_table = {
 
 db.create_table(items_table)
 
+# Create Users
+10.times do
+  db.put_item(
+    {
+      item: {
+        id: SecureRandom.uuid,
+        cognito_id: SecureRandom.hex(8),
+        created_at: Time.at(Time.now.utc - rand(259_200..31_536_000)).to_datetime.iso8601,
+        item_type: "user",
+        post_count: 0.0,
+        reply_count: 0.0,
+        username: FFaker::Internet.user_name
+      },
+      table_name: "items"
+    }
+  )
+end
+
+users = db.query(
+  {
+    expression_attribute_values: {
+      ":v1" => "user"
+    },
+    key_condition_expression: "item_type = :v1",
+    table_name: "items"
+  }
+).items
+
+users = users.map(&:with_indifferent_access)
+
 # Create Posts
 50.times do
+  user = users.sample
   db.put_item(
     {
       item: {
@@ -114,8 +145,29 @@ db.create_table(items_table)
         title: FFaker::Lorem.sentence,
         item_type: "post",
         link: FFaker::Internet.http_url,
-        username: FFaker::Internet.user_name
+        username: user[:username],
+        user_id: user[:id]
       },
+      table_name: "items"
+    }
+  )
+
+  user_post_count = user[:post_count] += 1
+
+  db.update_item(
+    {
+      key: {
+        item_type: "user",
+        id: user[:id]
+      },
+      expression_attribute_names: {
+        "#PC" => "post_count"
+      },
+      expression_attribute_values: {
+        ":pc" => user_post_count
+      },
+      update_expression: "SET #PC = :pc",
+      return_values: "ALL_NEW",
       table_name: "items"
     }
   )
@@ -139,6 +191,7 @@ posts.each do |post|
   post_created_at_epoch = DateTime.parse(post[:created_at]).to_time.to_i
 
   replies.times do
+    user = users.sample
     db.put_item(
       {
         item: {
@@ -147,8 +200,28 @@ posts.each do |post|
           reply_post_id: post_id,
           id: SecureRandom.uuid,
           item_type: "reply",
-          username: FFaker::Internet.user_name
+          username: user[:username],
+          user_id: user[:id]
         },
+        table_name: "items"
+      }
+    )
+
+    user_reply_count = user[:reply_count] += 1
+    db.update_item(
+      {
+        key: {
+          item_type: "user",
+          id: user[:id]
+        },
+        expression_attribute_names: {
+          "#RC" => "reply_count"
+        },
+        expression_attribute_values: {
+          ":rc" => user_reply_count
+        },
+        update_expression: "SET #RC = :rc",
+        return_values: "ALL_NEW",
         table_name: "items"
       }
     )

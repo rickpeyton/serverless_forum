@@ -1,8 +1,10 @@
 class PostContract < Dry::Validation::Contract
   params do
     optional(:comment).value(:string)
-    required(:title).value(:string)
     optional(:link).value(:string)
+    required(:title).value(:string)
+    required(:user_id).value(:string)
+    required(:username).value(:string)
   end
 
   rule(:comment) do
