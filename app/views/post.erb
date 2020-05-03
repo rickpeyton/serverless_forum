@@ -19,11 +19,17 @@
   <div class="row">
     <div class="twelve columns">
       <label for="reply-comment-textarea">Add Reply</label>
-      <textarea class="u-full-width" placeholder="Comment here" id="reply-comment-textarea" name="comment"></textarea>
+      <% if current_user %>
+        <textarea class="u-full-width" placeholder="Comment here" id="reply-comment-textarea" name="comment"></textarea>
+      <% end %>
     </div>
   </div>
   <input type="hidden" name="reply_post_id" value="<%= @post.id %>">
-  <input class="button-primary" type="submit" value="Submit" />
+  <% if current_user %>
+    <input class="button-primary" type="submit" value="Submit" />
+  <% else %>
+    You must <a href="<%= EasyCognito.sign_in_url %>">sign up</a> to reply
+  <% end %>
 </form>
 
 <% @replies.each do |reply| %>
