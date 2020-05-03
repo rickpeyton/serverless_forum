@@ -7,7 +7,7 @@
 </div>
 
 <div class="row post-details">
-  <%= @post.user_name %> <%= ViewHelpers.time_ago(@post.created_at_epoch) %> |
+  <%= @post.username %> <%= ViewHelpers.time_ago(@post.created_at_epoch) %> |
   <%= ViewHelpers.plural(@post.reply_count_int, "reply", "replies") %>
 </div>
 
@@ -28,7 +28,7 @@
 
 <% @replies.each do |reply| %>
   <div class="row twelve columns reply">
-    <div class="post-details"><%= reply.user_name %> <%= ViewHelpers.time_ago(reply.created_at_epoch) %></div>
+    <div class="post-details"><%= reply.username %> <%= ViewHelpers.time_ago(reply.created_at_epoch) %></div>
     <div class="reply-body"><%= reply.comment %></div>
   </div>
 <% end %>

@@ -5,6 +5,7 @@ gem "dry-initializer"
 gem "dry-types"
 gem "dry-validation"
 gem "http"
+gem "json-jwt"
 gem "sinatra"
 
 group :development, :test do

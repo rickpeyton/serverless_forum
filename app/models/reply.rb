@@ -11,7 +11,7 @@ class Reply
   option :id, default: proc { SecureRandom.uuid }
   option :item_type, default: proc { "reply" }
   option :reply_post_id
-  option :user_name, default: proc { "Anonymous User" }
+  option :username, default: proc { "Anonymous User" }
 
   def created_at_epoch
     created_at_datetime.to_time.to_i

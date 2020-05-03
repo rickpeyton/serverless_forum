@@ -8,9 +8,11 @@ require "dry-initializer"
 require "dry-types"
 require "dry-validation"
 require "http"
+require "json/jwt"
 require "sinatra/base"
 
 require_relative "customizations"
+require_relative "lib/easy_cognito"
 require_relative "models/contracts/post_contract"
 require_relative "models/contracts/reply_contract"
 require_relative "models/page"
@@ -18,6 +20,7 @@ require_relative "models/post"
 require_relative "models/post_collection"
 require_relative "models/reply"
 require_relative "models/reply_collection"
+require_relative "models/user"
 require_relative "views/view_helpers"
 
 class App < Sinatra::Base
@@ -25,6 +28,17 @@ class App < Sinatra::Base
   set port: 3000
   set :views, (proc { File.join(root, "views") })
   set :public_folder, (proc { File.join(root, "assets") })
+
+  enable :sessions
+  set :session_secret, ENV.fetch("SESSION_SECRET") { SecureRandom.hex(64) }
+
+  EasyCognito.client_id = ENV["COGNITO_CLIENT_ID"]
+  EasyCognito.client_secret = ENV["COGNITO_SECRET"]
+  EasyCognito.host_domain = ENV["COGNITO_HOST_DOMAIN"]
+  EasyCognito.jwk = JSON.parse(Base64.decode64(ENV["COGNITO_JWK"]))
+  EasyCognito.pool_id = ENV["COGNITO_POOL_ID"]
+  EasyCognito.redirect_uri = ENV["COGNITO_REDIRECT_URI"]
+  EasyCognito.region = ENV["COGNITO_REGION"]
 
   CUSTOM = Customizations.setup
   DB = Aws::DynamoDB::Client.new(endpoint: "http://db:8000") # TODO: Set the endpoint from the ENV
@@ -46,6 +60,8 @@ class App < Sinatra::Base
   end
 
   get "/post/new" do # Post New
+    require_user
+
     erb :post_new
   end
 
@@ -75,6 +91,28 @@ class App < Sinatra::Base
     else
       redirect "/"
     end
+  end
+
+  get "/sessions/new" do
+    redirect(EasyCognito.sign_in_url) && return unless params[:code]
+
+    cognito_sign_in = EasyCognito::SignIn.from(code: params[:code])
+
+    if cognito_sign_in.valid?
+      session[:easy_cognito] = cognito_sign_in.to_session
+      session[:current_user_id] = User.find_or_create_by(cognito_user: EasyCognito::User.from(session: session)).id
+      redirect "/"
+    else
+      redirect EasyCognito.sign_in_url
+    end
+  end
+
+  def current_user
+    @current_user ||= User.find_by(id: session[:current_user_id]) if session[:current_user_id]
+  end
+
+  def require_user
+    redirect "sessions/new" unless current_user
   end
 
   def sanitize_params(parameters, klass)

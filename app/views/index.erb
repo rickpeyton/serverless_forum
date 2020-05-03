@@ -7,7 +7,7 @@
             <a href="<%= url('/post?id=' + post.id) %>"><%= post.title %></a>
           </div>
           <div class="row post-details">
-            <%= post.user_name %> <%= ViewHelpers.time_ago(post.created_at_epoch) %>
+            <%= post.username %> <%= ViewHelpers.time_ago(post.created_at_epoch) %>
             | <a href="post?id=<%= post.id %>"><%= ViewHelpers.plural(post.reply_count_int, "reply", "replies") %></a>
           </div>
         </td>

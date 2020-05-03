@@ -35,7 +35,7 @@ class Post
   option :item_type, default: proc { "post" }
   option :title, type: Dry::Types["string"].constrained(min_size: 3)
   option :link, type: Dry::Types["string"].constrained(format: LINK_FORMAT), optional: true
-  option :user_name, default: proc { "Anonymous User" }
+  option :username, default: proc { "Anonymous User" }
 
   def reply_count_int
     reply_count.to_i

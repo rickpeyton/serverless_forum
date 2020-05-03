@@ -28,6 +28,10 @@ items_table = {
     {
       attribute_name: "item_type",
       attribute_type: "S"
+    },
+    {
+      attribute_name: "cognito_id",
+      attribute_type: "S"
     }
   ],
   table_name: "items",
@@ -77,6 +81,22 @@ items_table = {
       projection: {
         projection_type: "ALL"
       }
+    },
+    {
+      index_name: "item_type-cognito_id-index",
+      key_schema: [
+        {
+          attribute_name: "item_type",
+          key_type: "HASH"
+        },
+        {
+          attribute_name: "cognito_id",
+          key_type: "RANGE"
+        }
+      ],
+      projection: {
+        projection_type: "ALL"
+      }
     }
   ]
 }
@@ -94,7 +114,7 @@ db.create_table(items_table)
         title: FFaker::Lorem.sentence,
         item_type: "post",
         link: FFaker::Internet.http_url,
-        user_name: FFaker::Internet.user_name
+        username: FFaker::Internet.user_name
       },
       table_name: "items"
     }
@@ -127,7 +147,7 @@ posts.each do |post|
           reply_post_id: post_id,
           id: SecureRandom.uuid,
           item_type: "reply",
-          user_name: FFaker::Internet.user_name
+          username: FFaker::Internet.user_name
         },
         table_name: "items"
       }
