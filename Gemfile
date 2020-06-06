@@ -10,7 +10,9 @@ gem "sinatra"
 
 group :development, :test do
   gem "activesupport"
+  gem "dotenv" # TODO: Remove
   gem "ffaker"
+  gem "pg" # TODO: Remove
   gem "pry"
 end
 

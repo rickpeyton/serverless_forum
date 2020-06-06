@@ -103,7 +103,6 @@ items_table = {
 
 db.create_table(items_table)
 
-# Create Users
 10.times do
   db.put_item(
     {
@@ -133,7 +132,6 @@ users = db.query(
 
 users = users.map(&:with_indifferent_access)
 
-# Create Posts
 50.times do
   user = users.sample
   db.put_item(
@@ -183,7 +181,6 @@ posts = db.query(
   }
 ).items
 
-# Add replies to posts
 posts.each do |post|
   replies = rand(0..10)
   post = post.with_indifferent_access.symbolize_keys

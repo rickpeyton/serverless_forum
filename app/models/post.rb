@@ -77,13 +77,13 @@ class Post
     self
   end
 
+  def post_params
+    Post.dry_initializer.public_attributes(self).compact
+  end
+
 private
 
   def created_at_datetime
     DateTime.parse(created_at)
-  end
-
-  def post_params
-    Post.dry_initializer.public_attributes(self).compact
   end
 end

@@ -32,3 +32,5 @@
 
 .devcontainer/.env.devcontainer
 aws/item_table.json
+scripts/.env.scripts
+scripts/to_cognito.csv

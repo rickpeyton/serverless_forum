@@ -1,9 +1,11 @@
-<div class="row" style="padding-top: 12px">
-  <% if @post.link %>
-  <a href="<%= url(@post.link) %>"><%= @post.title %></a>
-  <% else %>
-  <%= @post.title %>
-  <% end %>
+<div class="row post-title" style="padding-top: 12px">
+  <h1>
+    <% if @post.link %>
+      <a href="<%= url(@post.link) %>"><%= @post.title %></a>
+    <% else %>
+      <%= @post.title %>
+    <% end %>
+  </h1>
 </div>
 
 <div class="row post-details">
@@ -15,6 +17,7 @@
   <%= @post.comment %>
 </div>
 
+<hr>
 <form action="<%= url('reply') %>" method="POST" id="add-reply">
   <div class="row">
     <div class="twelve columns">
@@ -31,6 +34,7 @@
     You must <a href="<%= EasyCognito.sign_in_url %>">sign up</a> to reply
   <% end %>
 </form>
+<hr>
 
 <% @replies.each do |reply| %>
   <div class="row twelve columns reply">

@@ -3,7 +3,7 @@
     <% @posts.each do |post| %>
       <tr>
         <td>
-          <div class="row">
+          <div class="row index-post-title">
             <a href="<%= url('/post?id=' + post.id) %>"><%= post.title %></a>
           </div>
           <div class="row post-details">

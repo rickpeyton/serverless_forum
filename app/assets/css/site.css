@@ -1,9 +1,10 @@
 :root {
   --main-bg-color: rgb(24, 43, 37);
   --main-error-color: #BF1A2F;
-  --main-font-size: 21px;
-  --smaller-font-size: calc(var(--main-font-size) * 0.85);
-  --smallest-font-size: calc(var(--main-font-size) * 0.69);
+  --main-font-weight: 400;
+  --main-font-size: 17px;
+  --main-line-height: 22px;
+  --smaller-font-size: calc(var(--main-font-size) * 0.88);
 }
 
 body {
@@ -11,7 +12,7 @@ body {
     Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
   font-size: var(--main-font-size);
   font-weight: 400;
-  line-height: 26px;
+  line-height: var(--main-line-height);
 }
 
 a {
@@ -25,6 +26,11 @@ header {
 
 header {
   color: white;
+}
+
+h1 { 
+  font-size: var(--main-font-size * 1.647058824);
+  line-height: var(--main-line-height * 1.545454545);
 }
 
 label {
@@ -44,7 +50,7 @@ form {
 footer,
 form,
 .post-details {
-  font-size: var(--smallest-font-size);
+  font-size: var(--smaller-font-size);
 }
 
 textarea {
@@ -69,6 +75,14 @@ header img {
   font-size: var(--smaller-font-size);
   margin-top: 1rem;
   padding: 2rem;
+}
+
+.index-post-title {
+  font-weight: 600;
+}
+
+.post-title {
+
 }
 
 .reply {
