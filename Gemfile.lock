@@ -911,7 +911,7 @@ GEM
       aws-eventstream (~> 1.0, >= 1.0.2)
     backport (1.1.2)
     benchmark (0.1.0)
-    bindata (2.4.7)
+    bindata (2.4.10)
     coderay (1.1.2)
     concurrent-ruby (1.1.6)
     crack (0.4.3)
